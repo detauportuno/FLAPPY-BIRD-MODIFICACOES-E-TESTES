@@ -73,6 +73,10 @@ Objetivo: Chegar a 80 pontos para ver todas as cores possíveis
 
 * O código ainda está bem bagunçado, e acredito que dá para ajustar algumas coisas, como por exemplo, colocando comentários dentro das funções.
 
+* Será adicionada uma versão Cyber - com novos fundos, personagens, canos, cores, e animações;
+
+* Será tambem adicionado um novo estilo de jogo onde o passaro se controlara como um navio, desviando dos canos ou objetos possivelmente com um joystick;
+
 Fique à vontade para mexer com o código e, se for ajudar, mande um PR que eu analiso assim que possível.
 
 
