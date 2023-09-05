@@ -3,23 +3,23 @@ import os
 import random
 from pygame import mixer 
 
-mixer.init() 
-mixer.music.load("song.mp3") 
-mixer.music.set_volume(0.7) 
-mixer.music.play() 
-while True: 
+##mixer.init() 
+##mixer.music.load("song.mp3") 
+##mixer.music.set_volume(0.7) 
+#mixer.music.play() 
+##while True: 
       
-    print("Press 'p' to pause, 'r' to resume") 
-    print("Press 'e' to exit the program") 
-    query = input("  ") 
+  ##  print("Press 'p' to pause, 'r' to resume") 
+    ## print("Press 'e' to exit the program") 
+   ## query = input("  ") 
       
-    if query == 'p': 
-        mixer.music.pause()      
-    elif query == 'r': 
-        mixer.music.unpause() 
-    elif query == 'e': 
-        mixer.music.stop() 
-        break
+   ## if query == 'p': 
+     ##   mixer.music.pause()      
+   # elif query == 'r': 
+    #    mixer.music.unpause() 
+   # elif query == 'e': 
+    #    mixer.music.stop() 
+     #   break
     
 TELA_LARGURA = 550
 TELA_ALTURA = 800
@@ -32,6 +32,10 @@ IMAGEM_CANO_ROXO = pygame.transform.scale2x(pygame.image.load(os.path.join('imgs
 
 IMAGEM_CHAO = pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'base.png')))
 IMAGEM_BACKGROUND = pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'bg.png')))
+
+
+IMAGEM_BACKGROUND_CYBER = pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'bg_cyber.png')))
+IMAGEM_CHAO_CYBER = pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'base_cyber.png')))
 
 pygame.font.init()
 FONTE_PONTOS = pygame.font.SysFont('arial', 30)
@@ -57,7 +61,11 @@ class Passaro:
         pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'Deteu2.png'))),
         pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'Deteu1.png')))
     ]
-
+    IMAGENS_PASSARO_4 = [
+        pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'Deteu3.png'))),
+        pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'Deteu2.png'))),
+        pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'Deteu1.png')))
+    ]
     # animações da rotação
     ROTAÇAO_MAXIMA = 25
     VELOCIDADE_ROTAÇAO = 20
@@ -263,14 +271,44 @@ def desenhar_tela(tela, passaros, canos, chao, pontos, recorde, game_over_flag, 
 
     chao.desenhar(tela)
     pygame.display.update()
+    
+def tela_inicial(tela):
+    opcao = None
+    
+    # Carregar a imagem de fundo
+    imagem_background = pygame.transform.scale(pygame.image.load(os.path.join('imgs', 'bg.png')), (TELA_LARGURA, TELA_ALTURA))
 
+    while opcao not in ('N', 'C', 'L'):
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_1:
+                    opcao = 'N'
+                elif evento.key == pygame.K_2:
+                    opcao = 'C'
+                elif evento.key == pygame.K_3:
+                    opcao = 'L'
+
+        # Desenhar o plano de fundo e a mensagem de escolha do personagem
+        tela.blit(imagem_background, (0, 0))
+        texto_escolha = FONTE_PONTOS.render("Modos de Jogo: Normal (N), Cyber (C), Loucura (L)", True, (255, 255, 255))
+        texto_aperte_tecla = FONTE_RECORDE.render("Escolha o modo de jogo que deseja jogar", True, (255, 255, 255))
+        tela.blit(texto_escolha, (TELA_LARGURA // 2 - texto_escolha.get_width() // 2, TELA_ALTURA // 2 - 30))
+        tela.blit(texto_aperte_tecla, (TELA_LARGURA // 2 - texto_aperte_tecla.get_width() // 2, TELA_ALTURA // 2 + 30))
+        pygame.display.update()
+
+    return opcao
+    
 def tela_selecao_passaro(tela):
     opcao = None
 
     # Carregar a imagem de fundo
     imagem_background = pygame.transform.scale(pygame.image.load(os.path.join('imgs', 'bg.png')), (TELA_LARGURA, TELA_ALTURA))
 
-    while opcao not in ('1', '2', '3'):
+    while opcao not in ('1', '2', '3', '4'):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
@@ -283,10 +321,12 @@ def tela_selecao_passaro(tela):
                     opcao = '2'
                 elif evento.key == pygame.K_3:
                     opcao = '3'
+                elif evento.key == pygame.K_4:
+                    opcao = '4'
 
         # Desenhar o plano de fundo e a mensagem de escolha do personagem
         tela.blit(imagem_background, (0, 0))
-        texto_escolha = FONTE_PONTOS.render("Escolha o Pássaro: 1, 2 ou 3", True, (255, 255, 255))
+        texto_escolha = FONTE_PONTOS.render("Escolha o Pássaro: 1, 2, 3 ou 4", True, (255, 255, 255))
         texto_aperte_tecla = FONTE_RECORDE.render("Aperte alguma das teclas para jogar", True, (255, 255, 255))
         tela.blit(texto_escolha, (TELA_LARGURA // 2 - texto_escolha.get_width() // 2, TELA_ALTURA // 2 - 30))
         tela.blit(texto_aperte_tecla, (TELA_LARGURA // 2 - texto_aperte_tecla.get_width() // 2, TELA_ALTURA // 2 + 30))
@@ -327,8 +367,10 @@ def main():
         passaros = [Passaro(230, 350, imgs=Passaro.IMAGENS_PASSARO_1)]
     elif opcao_passaro == '2':
         passaros = [Passaro(230, 350, imgs=Passaro.IMAGENS_PASSARO_2)]
-    else :
+    elif opcao_passaro == '3':
         passaros = [Passaro(230, 350, imgs=Passaro.IMAGENS_PASSARO_3)]
+    else:
+        passaros = [Passaro(230, 350, imgs=Passaro.IMAGENS_PASSARO_4)]
 
     chao = Chao(730)
     canos = [Cano(700)]
